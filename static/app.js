@@ -7,6 +7,7 @@ const concerns = document.getElementById("concerns");
 const advice = document.getElementById("advice");
 const immediateHelp = document.getElementById("immediate-help");
 const tagButtons = document.querySelectorAll(".tag-btn");
+const homeLink = document.getElementById("home-link");
 const historyLink = document.getElementById("history-link");
 const backBtn = document.getElementById("back-btn");
 const historyPanel = document.querySelector(".history-panel");
@@ -101,14 +102,23 @@ analyzeBtn.addEventListener("click", async () => {
 });
 
 historyLink.addEventListener("click", () => {
+    homeLink.classList.remove("active");
     historyLink.classList.add("active");
     heroGrid.classList.add("hidden");
     historyPanel.classList.remove("hidden");
     renderHistory();
 });
 
+homeLink.addEventListener("click", () => {
+    historyLink.classList.remove("active");
+    homeLink.classList.add("active");
+    heroGrid.classList.remove("hidden");
+    historyPanel.classList.add("hidden");
+});
+
 backBtn.addEventListener("click", () => {
     historyLink.classList.remove("active");
+    homeLink.classList.add("active");
     heroGrid.classList.remove("hidden");
     historyPanel.classList.add("hidden");
 });
