@@ -15,7 +15,7 @@ A simple mental health text analyzer built with Flask and the Groq client.
    ```
 3. Set your Groq API key:
    ```powershell
-   $env:GROQ_API_KEY = "your_api_key_here"
+   $env:GROQ_API_KEY = "REDACTED_GROQ_API_KEY"
    ```
 4. Run locally:
    ```powershell

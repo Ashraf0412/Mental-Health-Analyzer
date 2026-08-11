@@ -3,7 +3,7 @@ import json
 import os
 from groq import Groq
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_API_KEY = os.environ.get("REDACTED_GROQ_API_KEY")
 client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
