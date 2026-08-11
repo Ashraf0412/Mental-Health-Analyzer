@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mindify — Mental Health Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">🧠</div>
+                <div>
+                    <h1>Mindify</h1>
+                    <p>Mental Health Analyzer</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-link active">Home</a>
+                <a class="nav-link">Analyze</a>
+                <a class="nav-link">Insights</a>
+                <a class="nav-link">History</a>
+                <a class="nav-link">Resources</a>
+                <a class="nav-link">About</a>
+            </nav>
+
+            <div class="sidebar-card">
+                <h2>Take care of your mind</h2>
+                <p>Your mental well-being matters to us.</p>
+            </div>
+
+            <div class="theme-toggle">
+                <span>Light Mode</span>
+                <button>Toggle</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h2>Mental Health Analyzer</h2>
+                    <p>Share how you're feeling. We're here to listen and help.</p>
+                </div>
+                <button class="help-btn">How it works</button>
+            </header>
+
+            <section class="hero-grid">
+                <div class="input-panel">
+                    <div class="panel-header">
+                        <h3>How are you feeling today?</h3>
+                        <p>Share your thoughts and emotions in your own words.</p>
+                    </div>
+                    <textarea id="user-input" placeholder="I feel so irritated these days..." rows="12"></textarea>
+                    <div class="input-footer">
+                        <span id="char-count">0/1000</span>
+                        <button id="analyze-btn">Analyze Now</button>
+                    </div>
+                    <div class="quick-tags">
+                        <button class="tag-btn">Feeling anxious</button>
+                        <button class="tag-btn">Feeling down</button>
+                        <button class="tag-btn">Stressed out</button>
+                        <button class="tag-btn">Overwhelmed</button>
+                        <button class="tag-btn">Lonely</button>
+                    </div>
+                </div>
+
+                <div class="result-panel">
+                    <div class="panel-header">
+                        <h3>Your Analysis Result</h3>
+                        <p>Here's what we found based on your input.</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-summary">
+                            <div>
+                                <p class="muted">Risk Level</p>
+                                <h4 id="risk-level">—</h4>
+                            </div>
+                            <div class="risk-badge" id="risk-badge">No data</div>
+                        </div>
+
+                        <div class="result-details">
+                            <div>
+                                <p class="muted">Concerns Detected</p>
+                                <div id="concerns" class="chip-list">—</div>
+                            </div>
+                            <div>
+                                <p class="muted">Advice for You</p>
+                                <p id="advice">Enter your text and click Analyze Now to see a recommendation.</p>
+                            </div>
+                        </div>
+
+                        <div class="result-meta">
+                            <div>
+                                <span>Requires Immediate Help</span>
+                                <strong id="immediate-help">No</strong>
+                            </div>
+                            <div>
+                                <span>Disclaimer</span>
+                                <strong>This is not a medical diagnosis.</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="self-care-grid">
+                <div class="care-card">
+                    <h4>Take Deep Breaths</h4>
+                    <p>5 min breathing exercise</p>
+                </div>
+                <div class="care-card">
+                    <h4>Go for a Walk</h4>
+                    <p>A short walk can clear your mind</p>
+                </div>
+                <div class="care-card">
+                    <h4>Write Thoughts</h4>
+                    <p>Journaling helps express your feelings</p>
+                </div>
+                <div class="care-card">
+                    <h4>Stay Hydrated</h4>
+                    <p>Drink water and stay refreshed</p>
+                </div>
+                <div class="care-card">
+                    <h4>Listen to Music</h4>
+                    <p>Soothing music can reduce stress</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
