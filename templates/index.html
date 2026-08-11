@@ -15,18 +15,12 @@
             <div class="brand">
                 <div class="brand-icon">🧠</div>
                 <div>
-                    <h1>Mindify</h1>
                     <p>Mental Health Analyzer</p>
                 </div>
             </div>
 
             <nav class="nav-menu">
-                <a class="nav-link active">Home</a>
-                <a class="nav-link">Analyze</a>
-                <a class="nav-link">Insights</a>
-                <a class="nav-link">History</a>
-                <a class="nav-link">Resources</a>
-                <a class="nav-link">About</a>
+                <a class="nav-link active" id="history-link" href="javascript:void(0)">History</a>
             </nav>
 
             <div class="sidebar-card">
@@ -128,6 +122,16 @@
                 <div class="care-card">
                     <h4>Listen to Music</h4>
                     <p>Soothing music can reduce stress</p>
+                </div>
+            </section>
+            <section class="history-panel hidden">
+                <div class="panel-header">
+                    <h3>History</h3>
+                    <p>Past analyses are saved here for your review.</p>
+                </div>
+                <button id="back-btn" class="history-back">Back to analysis</button>
+                <div id="history-list" class="history-list">
+                    <p class="muted">No history yet. Analyze some text to save entries.</p>
                 </div>
             </section>
         </main>
