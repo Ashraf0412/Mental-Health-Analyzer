@@ -4,11 +4,7 @@ import os
 from groq import Groq
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
-if not GROQ_API_KEY:
-    raise ValueError("Please set GROQ_API_KEY in your environment variables.")
-
-client = Groq(api_key=GROQ_API_KEY)
+client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
@@ -52,6 +48,11 @@ Set "requires_immediate_help" to true when the text indicates
 immediate danger, suicidal intent, self-harm intent, or intent
                 to harm another person.
 """
+
+    if not client:
+        return jsonify({
+            "error": "GROQ_API_KEY is not configured. Set the GROQ_API_KEY environment variable to call the analysis API."
+        }), 500
 
     try:
         response = client.chat.completions.create(
