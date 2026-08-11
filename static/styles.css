@@ -79,6 +79,7 @@ button {
 .nav-menu {
     display: grid;
     gap: 12px;
+    margin-top: 0;
 }
 
 .nav-link {
