@@ -12,7 +12,7 @@ client = Groq(api_key=GROQ_API_KEY)
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024  # 25 MB max file size
 
-ALLOWED_AUDIO_EXTENSIONS = {"mp3", "wav", "m4a", "flac", "ogg", "opus", "webm"}
+ALLOWED_AUDIO_EXTENSIONS = {"mp3", "wav", "m4a", "mp4", "flac", "ogg", "opus", "webm", "aac"}
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_AUDIO_EXTENSIONS
@@ -59,8 +59,9 @@ def upload_audio():
         }), 400
     
     try:
-        # Save file to temporary location
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+        # Save file to temporary location with the original file extension
+        ext = os.path.splitext(audio_file.filename)[1] or ".wav"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as temp_file:
             audio_file.save(temp_file.name)
             temp_path = temp_file.name
         

@@ -19,6 +19,8 @@ let mediaRecorder;
 let audioChunks = [];
 let recordingStartTime;
 let recordingTimer;
+let supportedMimeType = "";
+
 const recordBtn = document.getElementById("record-btn");
 const stopRecordBtn = document.getElementById("stop-record-btn");
 const recordingTime = document.getElementById("recording-time");
@@ -49,15 +51,22 @@ function startRecording() {
     audioChunks = [];
     recordingStartTime = Date.now();
     
+    // Detect supported MIME type
+    const types = ["audio/webm", "audio/ogg", "audio/mp4", "audio/aac"];
+    supportedMimeType = types.find(type => MediaRecorder.isTypeSupported(type)) || "";
+
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        mediaRecorder = new MediaRecorder(stream);
+        const options = supportedMimeType ? { mimeType: supportedMimeType } : {};
+        mediaRecorder = new MediaRecorder(stream, options);
         
         mediaRecorder.ondataavailable = (event) => {
-            audioChunks.push(event.data);
+            if (event.data.size > 0) {
+                audioChunks.push(event.data);
+            }
         };
         
         mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+            const audioBlob = new Blob(audioChunks, { type: supportedMimeType || "audio/wav" });
             const audioUrl = URL.createObjectURL(audioBlob);
             audioPlayer.src = audioUrl;
             audioPlayback.classList.remove("hidden");
@@ -110,8 +119,14 @@ analyzeAudioBtn.addEventListener("click", async () => {
     const formData = new FormData();
     
     if (audioChunks.length > 0) {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        formData.append("audio", audioBlob, "recording.wav");
+        // Determine file extension based on MIME type
+        let extension = "webm";
+        if (supportedMimeType.includes("ogg")) extension = "ogg";
+        else if (supportedMimeType.includes("mp4")) extension = "mp4";
+        else if (supportedMimeType.includes("wav")) extension = "wav";
+        
+        const audioBlob = new Blob(audioChunks, { type: supportedMimeType || "audio/wav" });
+        formData.append("audio", audioBlob, `recording.${extension}`);
     } else if (audioFileInput.files.length > 0) {
         formData.append("audio", audioFileInput.files[0]);
     } else {
