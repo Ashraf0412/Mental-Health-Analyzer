@@ -288,27 +288,3 @@ backBtn.addEventListener("click", () => {
     heroGrid.classList.remove("hidden");
     historyPanel.classList.add("hidden");
 });
-    }
-});
-
-historyLink.addEventListener("click", () => {
-    homeLink.classList.remove("active");
-    historyLink.classList.add("active");
-    heroGrid.classList.add("hidden");
-    historyPanel.classList.remove("hidden");
-    renderHistory();
-});
-
-homeLink.addEventListener("click", () => {
-    historyLink.classList.remove("active");
-    homeLink.classList.add("active");
-    heroGrid.classList.remove("hidden");
-    historyPanel.classList.add("hidden");
-});
-
-backBtn.addEventListener("click", () => {
-    historyLink.classList.remove("active");
-    homeLink.classList.add("active");
-    heroGrid.classList.remove("hidden");
-    historyPanel.classList.add("hidden");
-});
