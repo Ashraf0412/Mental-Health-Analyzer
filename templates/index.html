@@ -60,28 +60,31 @@
                     
                     <div id="audio-tab" class="tab-content">
                         <div class="audio-section">
-                            <h4>Record Your Voice</h4>
-                            <div class="audio-controls">
-                                <button id="record-btn" class="audio-btn primary">Start Recording</button>
-                                <button id="stop-record-btn" class="audio-btn secondary" disabled>Stop Recording</button>
-                                <span id="recording-time" class="recording-time hidden">0:00</span>
-                            </div>
-                            <div id="audio-playback" class="audio-playback hidden">
-                                <p>Recorded Audio:</p>
-                                <audio id="audio-player" controls></audio>
-                                <button id="clear-recording-btn" class="audio-btn secondary">Clear Recording</button>
-                            </div>
-                            <p class="audio-info">or</p>
-                            <h4>Upload Audio File</h4>
-                            <div class="file-upload">
+                            <label for="audio-file-input" class="audio-input-card">
                                 <input type="file" id="audio-file-input" accept=".mp3,.wav,.m4a,.flac,.ogg,.opus,.webm" />
-                                <label for="audio-file-input" class="file-label">Choose Audio File</label>
-                                <span id="file-name" class="file-name"></span>
+                                <span class="audio-input-card__title">Upload an audio file</span>
+                                <span class="audio-input-card__hint">Click anywhere in this card to choose a file.</span>
+                                <span id="file-name" class="file-name" aria-live="polite"></span>
+                            </label>
+                            <p class="audio-formats">Supported formats: MP3, WAV, M4A, FLAC, OGG, OPUS, WebM</p>
+
+                            <p class="audio-info">or</p>
+                            <div class="recording-card">
+                                <h4>Record Your Voice</h4>
+                                <div class="audio-controls">
+                                    <button id="record-btn" class="audio-btn primary">Start Recording</button>
+                                    <button id="stop-record-btn" class="audio-btn secondary" disabled>Stop Recording</button>
+                                    <span id="recording-time" class="recording-time hidden">0:00</span>
+                                </div>
+                                <div id="audio-playback" class="audio-playback hidden">
+                                    <p>Recorded Audio:</p>
+                                    <audio id="audio-player" controls></audio>
+                                    <button id="clear-recording-btn" class="audio-btn secondary">Clear Recording</button>
+                                </div>
                             </div>
                             <div class="audio-footer">
                                 <button id="analyze-audio-btn" class="audio-btn primary">Analyze Audio</button>
                             </div>
-                            <p class="audio-formats">Supported formats: MP3, WAV, M4A, FLAC, OGG, OPUS, WebM</p>
                         </div>
                     </div>
                 </div>
