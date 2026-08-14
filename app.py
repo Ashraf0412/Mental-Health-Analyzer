@@ -6,7 +6,9 @@ from health import transcribe_audio, detect_mental_health
 from werkzeug.utils import secure_filename
 import tempfile
 
-GROQ_API_KEY = "REDACTED_GROQ_API_KEY"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise ValueError("Set the GROQ_API_KEY environment variable before starting the app.")
 client = Groq(api_key=GROQ_API_KEY)
 
 app = Flask(__name__, static_folder="static", template_folder="templates")

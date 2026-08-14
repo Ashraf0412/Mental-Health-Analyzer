@@ -4,15 +4,14 @@ from groq import Groq
 
 
 
-GROQ_API_KEY = "REDACTED_GROQ_API_KEY"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 
 if (
     not GROQ_API_KEY
-    or GROQ_API_KEY == "PASTE_YOUR_GROQ_API_KEY_HERE"
 ):
     raise ValueError(
-        "Please paste your actual Groq API key in GROQ_API_KEY."
+        "Set the GROQ_API_KEY environment variable before starting the app."
     )
 
 
