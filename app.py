@@ -1,15 +1,8 @@
 from flask import Flask, render_template, request, jsonify
-import json
 import os
-from groq import Groq
 from health import transcribe_audio, detect_mental_health
 from werkzeug.utils import secure_filename
 import tempfile
-
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("Set the GROQ_API_KEY environment variable before starting the app.")
-client = Groq(api_key=GROQ_API_KEY)
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024  # 25 MB max file size

@@ -4,19 +4,14 @@ from groq import Groq
 
 
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
-
-if (
-    not GROQ_API_KEY
-):
-    raise ValueError(
-        "Set the GROQ_API_KEY environment variable before starting the app."
-    )
-
-
-# Initialize Groq client
-client = Groq(api_key=GROQ_API_KEY)
+def get_groq_client():
+    """Create a Groq client when a request actually needs one."""
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "Set the GROQ_API_KEY environment variable before using analysis features."
+        )
+    return Groq(api_key=api_key)
 
 
 def transcribe_audio(audio_file_path):
@@ -27,7 +22,7 @@ def transcribe_audio(audio_file_path):
 
     try:
         with open(audio_file_path, "rb") as audio_file:
-            transcription = client.audio.transcriptions.create(
+            transcription = get_groq_client().audio.transcriptions.create(
                 file=audio_file,
                 model="whisper-large-v3"
             )
@@ -84,7 +79,7 @@ to harm another person.
 """
 
     try:
-        response = client.chat.completions.create(
+        response = get_groq_client().chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
                 {
