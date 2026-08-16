@@ -30,8 +30,23 @@ const clearRecordingBtn = document.getElementById("clear-recording-btn");
 const audioFileInput = document.getElementById("audio-file-input");
 const fileName = document.getElementById("file-name");
 const analyzeAudioBtn = document.getElementById("analyze-audio-btn");
+const audioTranscriptCard = document.getElementById("audio-transcript-card");
+const audioTranscriptText = document.getElementById("audio-transcript-text");
+const audioTranscriptStatus = document.getElementById("audio-transcript-status");
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
+
+function resetAudioTranscript() {
+    audioTranscriptCard.classList.add("hidden");
+    audioTranscriptText.textContent = "";
+    audioTranscriptStatus.textContent = "";
+}
+
+function showAudioTranscript(text, status = "") {
+    audioTranscriptCard.classList.remove("hidden");
+    audioTranscriptText.textContent = text;
+    audioTranscriptStatus.textContent = status;
+}
 
 // Tab switching
 tabBtns.forEach((btn) => {
@@ -50,6 +65,7 @@ tabBtns.forEach((btn) => {
 function startRecording() {
     audioChunks = [];
     recordingStartTime = Date.now();
+    resetAudioTranscript();
     
     // Detect supported MIME type
     const types = ["audio/webm", "audio/ogg", "audio/mp4", "audio/aac"];
@@ -107,11 +123,13 @@ clearRecordingBtn.addEventListener("click", () => {
     audioChunks = [];
     recordingTime.textContent = "0:00";
     recordingTime.classList.add("hidden");
+    resetAudioTranscript();
 });
 
 audioFileInput.addEventListener("change", () => {
     if (audioFileInput.files.length > 0) {
         fileName.textContent = audioFileInput.files[0].name;
+        resetAudioTranscript();
     }
 });
 
@@ -136,6 +154,7 @@ analyzeAudioBtn.addEventListener("click", async () => {
     
     analyzeAudioBtn.textContent = "Analyzing Audio...";
     analyzeAudioBtn.disabled = true;
+    showAudioTranscript("Your audio is being transcribed. This may take a moment.", "Transcribing...");
     
     try {
         const response = await fetch("/upload-audio", {
@@ -153,6 +172,9 @@ analyzeAudioBtn.addEventListener("click", async () => {
         if (result.transcribed_text) {
             textarea.value = result.transcribed_text;
             textarea.dispatchEvent(new Event("input"));
+            showAudioTranscript(result.transcribed_text, "Ready");
+        } else {
+            showAudioTranscript("No speech was detected in this audio.", "No transcript");
         }
         
         // Display analysis results
@@ -171,6 +193,7 @@ analyzeAudioBtn.addEventListener("click", async () => {
             source: "audio"
         });
     } catch (error) {
+        showAudioTranscript("We couldn't transcribe this audio. Please try again.", "Transcription failed");
         alert(error.message);
     } finally {
         analyzeAudioBtn.textContent = "Analyze Audio";
