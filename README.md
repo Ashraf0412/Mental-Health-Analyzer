@@ -30,6 +30,101 @@ Mindify is a Flask web application for supportive mental-wellbeing screening. A 
 4. The returned transcript is shown in the Audio Input transcript card and is passed to the same text-analysis flow.
 5. The transcript and result are saved in browser-local history as an `audio` entry.
 
+## Flask API connections in detail
+
+Flask is the bridge between the browser interface and the Groq AI services. The browser never calls Groq directly and never receives the `GROQ_API_KEY`; it only communicates with this application's Flask routes.
+
+### 1. Loading the application — `GET /`
+
+When a user opens the website, the browser requests the root URL. The `index()` function in `app.py` responds with `templates/index.html`. The browser then loads `static/styles.css` for styling and `static/app.js` for interactive behavior.
+
+```text
+Browser ── GET / ──> Flask (`app.py`) ──> `index.html`
+Browser <── HTML, CSS, JS ─────────────── Flask
+```
+
+### 2. Text analysis — `POST /analyze`
+
+When the user clicks **Analyze Now**, `static/app.js` reads the text area and sends a JSON request using `fetch()`:
+
+```json
+{
+  "text": "I have been feeling stressed recently."
+}
+```
+
+`app.py` receives this request in the `analyze()` route. It trims the text and rejects empty input with a `400 Bad Request` response. Valid text is passed to `detect_mental_health()` in `health.py`.
+
+`health.py` creates a Groq client using the private `GROQ_API_KEY` environment variable and sends the text plus a safety-focused system prompt to the `llama-3.1-8b-instant` model. The prompt requests a JSON response. Flask returns that result to the browser, which updates the risk level, concerns, advice, and immediate-help fields.
+
+Example response:
+
+```json
+{
+  "risk_level": "medium",
+  "concerns": ["Stress", "Emotional distress"],
+  "advice": "Consider taking a short break and speaking with someone you trust.",
+  "requires_immediate_help": false,
+  "disclaimer": "This is not a medical diagnosis."
+}
+```
+
+```text
+`app.js` ── POST /analyze (JSON) ──> `app.py`
+`app.py` ── `detect_mental_health(text)` ──> `health.py`
+`health.py` ── Groq chat request ──> Groq
+Groq ── JSON result ──> `health.py` ──> `app.py` ──> `app.js`
+```
+
+If the Groq call or result parsing fails, `health.py` returns an error object. The Flask route sends it to the browser with a `502 Bad Gateway` status, and the browser shows the error message.
+
+### 3. Audio transcription and analysis — `POST /upload-audio`
+
+When the user clicks **Analyze Audio**, `static/app.js` either uses the selected file or converts recorded microphone chunks into a `Blob`. It adds the audio to a `FormData` object and sends it without manually setting `Content-Type`; the browser adds the required `multipart/form-data` boundary automatically.
+
+```javascript
+const formData = new FormData();
+formData.append("audio", audioFileOrBlob, "recording.webm");
+
+fetch("/upload-audio", {
+  method: "POST",
+  body: formData
+});
+```
+
+The `upload_audio()` route in `app.py` performs these steps:
+
+1. Checks that the request contains an `audio` file field.
+2. Checks that a file name exists and that its extension is in the allowed audio-format list.
+3. Applies Flask's 25 MB request-size limit.
+4. Saves the upload to a temporary file with the same extension.
+5. Calls `transcribe_audio()` in `health.py`, which sends that file to Groq's `whisper-large-v3` transcription model.
+6. Removes the temporary file after transcription.
+7. Sends the returned transcript to `detect_mental_health()` for the same screening process used by text input.
+8. Adds `transcribed_text` to the JSON response and returns it to the browser.
+
+Example audio response:
+
+```json
+{
+  "transcribed_text": "I have been feeling overwhelmed at work.",
+  "risk_level": "medium",
+  "concerns": ["Stress"],
+  "advice": "Try taking a short break and reach out for support if needed.",
+  "requires_immediate_help": false,
+  "disclaimer": "This is not a medical diagnosis."
+}
+```
+
+After receiving the response, `app.js` displays the transcript in the Audio Input card, copies it into the text area for visibility, renders the analysis, and saves an `audio` item to local history. Audio validation failures return `400`; transcription errors return `502`; unexpected server errors return `500`.
+
+### API security and data handling
+
+- `GROQ_API_KEY` stays on the server as an environment variable and must never be added to client-side JavaScript, HTML, or Git commits.
+- Uploaded audio is written to a temporary server file only for transcription, then deleted by the current request flow.
+- Analysis History uses browser `localStorage`; it is not stored in Flask or a server database.
+- This project has no user authentication or permanent database. Deploy it over HTTPS so microphone access and data in transit are protected.
+
 ## Project files
 
 | File / folder | Significance |
