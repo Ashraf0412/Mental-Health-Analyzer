@@ -218,9 +218,12 @@ function renderHistory() {
         return;
     }
 
-    historyList.innerHTML = history.map((item) => `
+    historyList.innerHTML = history.map((item, index) => `
         <div class="history-item">
-            <div class="history-text">${item.text}</div>
+            <div class="history-item__header">
+                <div class="history-text">${item.text}</div>
+                <button type="button" class="delete-history-btn" data-history-index="${index}" aria-label="Delete this history record">Delete</button>
+            </div>
             <div class="history-meta">
                 <span><strong>Risk:</strong> ${item.result.risk_level}</span>
                 <span><strong>Help:</strong> ${item.result.requires_immediate_help ? "Yes" : "No"}</span>
@@ -231,6 +234,19 @@ function renderHistory() {
         </div>
     `).join("");
 }
+
+historyList.addEventListener("click", (event) => {
+    const deleteButton = event.target.closest(".delete-history-btn");
+    if (!deleteButton) return;
+
+    const index = Number(deleteButton.dataset.historyIndex);
+    const history = getHistory();
+    if (!Number.isInteger(index) || index < 0 || index >= history.length) return;
+
+    history.splice(index, 1);
+    localStorage.setItem("analysisHistory", JSON.stringify(history));
+    renderHistory();
+});
 
 typeof textarea !== "undefined" && textarea.addEventListener("input", () => {
     const length = textarea.value.length;
