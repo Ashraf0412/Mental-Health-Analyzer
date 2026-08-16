@@ -160,6 +160,45 @@ After receiving the response, `app.js` displays the transcript in the Audio Inpu
 - Python 3.10 or later
 - A Groq API key
 
+### API key storage
+
+The Groq API key is deliberately **not stored in this project**. `health.py` reads it at runtime from the `GROQ_API_KEY` environment variable:
+
+```python
+api_key = os.environ.get("GROQ_API_KEY")
+```
+
+An environment variable is a value held by the operating system or deployment platform, outside the source code. This keeps the secret out of `app.py`, `health.py`, client-side JavaScript, and GitHub commits. Never add a key beginning with `gsk_` to a project file or share it publicly.
+
+To create or copy a Groq API key, open [Groq API Keys](https://console.groq.com/keys). If an existing key was not saved when it was created, make a new key and use that one.
+
+#### Set the key locally in PowerShell
+
+Run this in the PowerShell window before starting the app. It applies only to that terminal session:
+
+```powershell
+$env:GROQ_API_KEY = "your-groq-api-key"
+```
+
+To check the key currently available in that terminal, run:
+
+```powershell
+$env:GROQ_API_KEY
+```
+
+This command prints the secret, so do not use it in a screenshot, screen share, or public terminal log.
+
+#### Set the key in Render
+
+Render runs on a separate server, so it cannot use the environment variable from your computer. In the Render dashboard, open your web service and go to **Environment**. Add an environment variable with:
+
+```text
+Key:   GROQ_API_KEY
+Value: your-groq-api-key
+```
+
+Save the change and redeploy or restart the service. The application will then access the key through `os.environ.get("GROQ_API_KEY")` without exposing it to website visitors.
+
 ### Run the app
 
 1. Move into the project folder:
