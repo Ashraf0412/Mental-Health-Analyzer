@@ -250,3 +250,8 @@ For Render or a similar service:
 - The microphone feature needs browser permission and generally requires HTTPS when deployed (localhost is typically allowed during development).
 - History is device- and browser-specific. Clearing browser site data also clears it.
 - The AI output is a supportive screening result, not medical advice or a diagnosis.
+
+
+## Updated model 
+- previous model ="llama-3.1-8b-instant" ( This model is dropped by the developer )
+- New model is "openai/gpt-oss-120b"
