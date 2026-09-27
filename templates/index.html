@@ -105,15 +105,23 @@
                         <div class="result-summary">
                             <div>
                                 <p class="muted">Risk Level</p>
-                                <h4 id="risk-level">—</h4>
+                                <h4 id="risk-level"></h4>
                             </div>
-                            <div class="risk-badge" id="risk-badge">No data</div>
+                            <div class="risk-badge" id="risk-badge" aria-live="polite"></div>
                         </div>
 
                         <div class="result-details">
                             <div>
                                 <p class="muted">Concerns Detected</p>
-                                <div id="concerns" class="chip-list">—</div>
+                                <div id="concerns" class="chip-list">
+                                    <div class="empty-state">
+                                        <svg class="empty-state__icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                                            <path d="M24 5.5 28.7 9l5.9-.1 2.1 5.5 4.9 3.4-1.2 5.8 1.2 5.8-4.9 3.4-2.1 5.5-5.9-.1L24 41.5 19.3 38l-5.9.1-2.1-5.5-4.9-3.4 1.2-5.8-1.2-5.8 4.9-3.4 2.1-5.5 5.9.1L24 5.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                                            <path d="M17.5 24.5 22 29l9-10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <span>Your results will appear here.</span>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <p class="muted">Advice for You</p>
@@ -122,11 +130,11 @@
                         </div>
 
                         <div class="result-meta">
-                            <div>
+                            <div class="result-meta__help">
                                 <span>Requires Immediate Help</span>
-                                <strong id="immediate-help">No</strong>
+                                <strong id="immediate-help" aria-live="polite">No</strong>
                             </div>
-                            <div>
+                            <div class="result-meta__disclaimer">
                                 <span>Disclaimer</span>
                                 <strong>This is not a medical diagnosis.</strong>
                             </div>
